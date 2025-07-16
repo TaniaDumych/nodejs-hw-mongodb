@@ -1,12 +1,29 @@
-const createError = require('http-errors');
-const contactsService = require('../services/contacts');
+import createError from 'http-errors';
+import * as contactsService from '../services/contacts.js';
 
 async function getContacts(req, res) {
-  const contacts = await contactsService.getAllContacts();
+  const {
+    page = 1,
+    perPage = 10,
+    sortBy = 'name',
+    sortOrder = 'asc',
+    type,
+    isFavourite,
+  } = req.query;
+
+  const data = await contactsService.getContactsPaginated({
+    page: Number(page),
+    perPage: Number(perPage),
+    sortBy,
+    sortOrder,
+    type,
+    isFavourite,
+  });
+
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: contacts,
+    data,
   });
 }
 
@@ -60,7 +77,7 @@ async function patchContact(req, res) {
   });
 }
 
-module.exports = {
+export default  {
   getContacts,
   getContact,
   deleteContact,
