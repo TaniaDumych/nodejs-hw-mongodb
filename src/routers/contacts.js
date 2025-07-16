@@ -10,6 +10,7 @@ import { createContactSchema, updateContactSchema } from '../schemas/contactSche
 
 
 
+
 router.get('/', ctrlWrapper(contactsController.getContacts));
 
 
