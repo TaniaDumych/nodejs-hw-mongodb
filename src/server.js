@@ -1,10 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const pino = require('pino-http')();
+import express from 'express';
+import cors from 'cors';
+import pino from 'pino-http';
 
-const contactsRouter = require('./routers/contacts'); 
-const notFoundHandler = require('./middlewares/notFoundHandler');
-const errorHandler = require('./middlewares/errorHandler');
+
+import contactsRouter from './routers/contacts.js';
+import notFoundHandler from './middlewares/notFoundHandler.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 function setupServer() {
   const app = express();
@@ -25,4 +26,4 @@ function setupServer() {
   });
 }
 
-module.exports = setupServer;
+export default setupServer;
