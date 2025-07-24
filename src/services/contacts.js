@@ -1,7 +1,7 @@
 import Contact from '../models/contact.js';
 
-
 async function getContactsPaginated({
+  userId, 
   page = 1,
   perPage = 10,
   sortBy = 'name',
@@ -11,8 +11,9 @@ async function getContactsPaginated({
 } = {}) {
   const skip = (page - 1) * perPage;
 
-  
-  const filter = {};
+ 
+  const filter = { userId };
+
   if (type) filter.contactType = type;
   if (typeof isFavourite !== 'undefined') filter.isFavourite = isFavourite === 'true';
 
@@ -35,29 +36,27 @@ async function getContactsPaginated({
   };
 }
 
-
-async function getAllContacts() {
-  return Contact.find();
+async function getAllContacts(userId) {
+  return Contact.find({ userId });
 }
 
-async function getContactById(contactId) {
-  return Contact.findById(contactId);
+async function getContactById(contactId, userId) {
+  return Contact.findOne({ _id: contactId, userId });
 }
 
-async function deleteContactById(contactId) {
-  return Contact.findByIdAndDelete(contactId);
+async function deleteContactById(contactId, userId) {
+  return Contact.findOneAndDelete({ _id: contactId, userId });
 }
 
 async function createContact(data) {
   return Contact.create(data);
 }
 
-async function updateContactById(contactId, data) {
-  return Contact.findByIdAndUpdate(contactId, data, { new: true });
+async function updateContactById(contactId, data, userId) {
+  return Contact.findOneAndUpdate({ _id: contactId, userId }, data, { new: true });
 }
 
-export  {
-
+export {
   getContactsPaginated,
   getAllContacts,
   getContactById,
