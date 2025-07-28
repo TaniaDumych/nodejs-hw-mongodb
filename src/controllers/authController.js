@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-const { JWT_SECRET } = process.env;
+const { ACCESS_TOKEN_SECRET } = process.env;
 
 export const loginUser = async (req, res, next) => {
   try {
@@ -20,7 +20,7 @@ export const loginUser = async (req, res, next) => {
     }
 
    
-    const accessToken = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ id: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({
       message: 'Successfully logged in!',
