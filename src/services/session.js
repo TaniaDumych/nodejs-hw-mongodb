@@ -1,7 +1,10 @@
 import Session from '../models/Session.js';
 import jwt from 'jsonwebtoken';
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'access-secret';
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET; 
+if (!ACCESS_TOKEN_SECRET) {
+  throw new Error('ACCESS_TOKEN_SECRET is not set in environment variables');
+}
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'refresh-secret';
 
 

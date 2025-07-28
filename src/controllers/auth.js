@@ -85,6 +85,7 @@ export async function loginController(req, res, next) {
       status: 200,
       message: 'Successfully logged in an user!',
       data: { accessToken },
+       refreshToken: newRefreshToken,
     });
   } catch (err) {
     next(err);
