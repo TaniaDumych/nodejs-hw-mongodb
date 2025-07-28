@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import createHttpError from 'http-errors';
 
-const { JWT_SECRET } = process.env;
+const { ACCESS_TOKEN_SECRET } = process.env;
 
 export const authenticate = (req, res, next) => {
   try {
@@ -17,16 +17,16 @@ export const authenticate = (req, res, next) => {
       throw createHttpError(401, 'Invalid authorization format');
     }
 
-    const payload = jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
-    req.user = payload; 
+    req.user = payload;
 
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      next(createHttpError(401, 'Access token expired'));
-      return;
+      return next(createHttpError(401, 'Access token expired'));
     }
-    next(createHttpError(401, 'Invalid access token'));
+    return next(createHttpError(401, 'Invalid access token'));
   }
 };
+

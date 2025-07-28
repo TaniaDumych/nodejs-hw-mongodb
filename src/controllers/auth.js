@@ -74,7 +74,7 @@ export async function loginController(req, res, next) {
     });
 
     
-    res.cookie('refreshToken', newRefreshToken, {
+    res.cookie('refreshToken', newRefreshToken,{
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 30 * 24 * 60 * 60 * 1000, 
