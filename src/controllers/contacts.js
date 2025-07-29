@@ -12,10 +12,10 @@ export async function getContacts(req, res, next) {
       isFavourite,
     } = req.query;
 
-    const userId = req.user.id; 
+    const { _id: userId } = req.user; 
 
     const data = await contactsService.getContactsPaginated({
-      userId,
+      userId, 
       page: Number(page),
       perPage: Number(perPage),
       sortBy,
@@ -74,8 +74,8 @@ export async function deleteContact(req, res, next) {
 
 export async function createContact(req, res, next) {
   try {
-    const userId = req.user.id;
-    const newContact = await contactsService.createContact({ ...req.body, userId });
+    const { _id: userId } = req.user;
+const newContact = await contactsService.createContact({ ...req.body, owner: userId });
 
     res.status(201).json({
       status: 201,

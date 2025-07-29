@@ -80,13 +80,15 @@ export async function loginController(req, res, next) {
       maxAge: 30 * 24 * 60 * 60 * 1000, 
       sameSite: 'strict',
     });
+    
+res.status(200).json({
+  status: 200,
+  message: 'Successfully logged in an user!',
+  data: {
+    accessToken,
+  },
+});
 
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully logged in an user!',
-      data: { accessToken },
-       refreshToken: newRefreshToken,
-    });
   } catch (err) {
     next(err);
   }
