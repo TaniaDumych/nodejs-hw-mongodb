@@ -86,7 +86,6 @@ res.status(200).json({
   message: 'Successfully logged in an user!',
   data: {
     accessToken,
-    refreshToken: newRefreshToken,
   },
 });
 

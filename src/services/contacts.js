@@ -12,7 +12,7 @@ async function getContactsPaginated({
   const skip = (page - 1) * perPage;
 
  
-  const filter = { userId };
+  const filter = { owner: userId };
 
   if (type) filter.contactType = type;
   if (typeof isFavourite !== 'undefined') filter.isFavourite = isFavourite === 'true';
@@ -37,15 +37,15 @@ async function getContactsPaginated({
 }
 
 async function getAllContacts(userId) {
-  return Contact.find({ userId });
+  return Contact.find({ owner: userId });
 }
 
 async function getContactById(contactId, userId) {
-  return Contact.findOne({ _id: contactId, userId });
+  return Contact.findOne({ _id: contactId, owner: userId });
 }
 
 async function deleteContactById(contactId, userId) {
-  return Contact.findOneAndDelete({ _id: contactId, userId });
+  return Contact.findOneAndDelete({ _id: contactId, owner: userId });
 }
 
 async function createContact(data) {
@@ -53,7 +53,7 @@ async function createContact(data) {
 }
 
 async function updateContactById(contactId, data, userId) {
-  return Contact.findOneAndUpdate({ _id: contactId, userId }, data, { new: true });
+  return Contact.findOneAndUpdate({ _id: contactId, owner: userId }, data, { new: true }); 
 }
 
 export {
