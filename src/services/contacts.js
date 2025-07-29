@@ -11,7 +11,9 @@ async function getContactsPaginated({
 } = {}) {
   const skip = (page - 1) * perPage;
 
- 
+ if (!userId) {
+    throw new Error('User ID is missing');
+  }
   const filter = { owner: userId };
 
   if (type) filter.contactType = type;

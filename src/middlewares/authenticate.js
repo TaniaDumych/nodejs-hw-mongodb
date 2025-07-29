@@ -19,7 +19,7 @@ export const authenticate = (req, res, next) => {
 
     const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
-    req.user = payload;
+    req.user = { _id: payload.userId };
 
     next();
   } catch (error) {
