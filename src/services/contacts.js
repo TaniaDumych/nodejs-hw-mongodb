@@ -14,7 +14,7 @@ async function getContactsPaginated({
  if (!userId) {
     throw new Error('User ID is missing');
   }
-  const filter = { owner: userId };
+  const filter = { userId };
 
   if (type) filter.contactType = type;
   if (typeof isFavourite !== 'undefined') filter.isFavourite = isFavourite === 'true';
@@ -39,15 +39,15 @@ async function getContactsPaginated({
 }
 
 async function getAllContacts(userId) {
-  return Contact.find({ owner: userId });
+  return Contact.find({  userId });
 }
 
 async function getContactById(contactId, userId) {
-  return Contact.findOne({ _id: contactId, owner: userId });
+  return Contact.findOne({ _id: contactId, userId });
 }
 
 async function deleteContactById(contactId, userId) {
-  return Contact.findOneAndDelete({ _id: contactId, owner: userId });
+  return Contact.findOneAndDelete({ _id: contactId,  userId });
 }
 
 async function createContact(data) {
@@ -55,7 +55,7 @@ async function createContact(data) {
 }
 
 async function updateContactById(contactId, data, userId) {
-  return Contact.findOneAndUpdate({ _id: contactId, owner: userId }, data, { new: true }); 
+  return Contact.findOneAndUpdate({ _id: contactId, userId }, data, { new: true }); 
 }
 
 export {

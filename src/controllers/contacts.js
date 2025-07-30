@@ -37,7 +37,7 @@ export async function getContacts(req, res, next) {
 export async function getContact(req, res, next) {
   try {
     const { contactId } = req.params;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     const contact = await contactsService.getContactById(contactId, userId);
 
@@ -58,7 +58,7 @@ export async function getContact(req, res, next) {
 export async function deleteContact(req, res, next) {
   try {
     const { contactId } = req.params;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     const deletedContact = await contactsService.deleteContactById(contactId, userId);
 
@@ -75,7 +75,7 @@ export async function deleteContact(req, res, next) {
 export async function createContact(req, res, next) {
   try {
     const { _id: userId } = req.user;
-const newContact = await contactsService.createContact({ ...req.body, owner: userId });
+const newContact = await contactsService.createContact({ ...req.body, userId });
 
     res.status(201).json({
       status: 201,
@@ -90,7 +90,7 @@ const newContact = await contactsService.createContact({ ...req.body, owner: use
 export async function patchContact(req, res, next) {
   try {
     const { contactId } = req.params;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     const updatedContact = await contactsService.updateContactById(contactId, req.body, userId);
 

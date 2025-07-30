@@ -3,27 +3,29 @@ import mongoose from 'mongoose';
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Set name for contact'],
+    required: true,
   },
   email: {
     type: String,
+    required: true,
   },
   phone: {
     type: String,
+    required: true,
   },
   favorite: {
     type: Boolean,
     default: false,
   },
-  owner: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-}, { versionKey: false, timestamps: true });
-
+}, { timestamps: true });
 
 const Contact = mongoose.model('Contact', contactSchema);
 
 export default Contact;
+
 
