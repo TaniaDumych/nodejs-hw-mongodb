@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import createHttpError from 'http-errors';
 
-const { ACCESS_TOKEN_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
 export const authenticate = (req, res, next) => {
   try {
@@ -17,7 +17,7 @@ export const authenticate = (req, res, next) => {
       throw createHttpError(401, 'Invalid authorization format');
     }
 
-    const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
+    const payload = jwt.verify(token, JWT_SECRET);
 
     req.user = { _id: payload.userId };
 

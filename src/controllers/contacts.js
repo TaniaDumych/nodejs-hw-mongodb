@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import * as contactsService from '../services/contacts.js';
+import { upload } from '../services/cloudinary.js';
 
 export async function getContacts(req, res, next) {
   try {
@@ -12,10 +13,10 @@ export async function getContacts(req, res, next) {
       isFavourite,
     } = req.query;
 
-    const { _id: userId } = req.user; 
+    const { _id: userId } = req.user;
 
     const data = await contactsService.getContactsPaginated({
-      userId, 
+      userId,
       page: Number(page),
       perPage: Number(perPage),
       sortBy,
@@ -72,28 +73,46 @@ export async function deleteContact(req, res, next) {
   }
 }
 
-export async function createContact(req, res, next) {
+export const createContact = async (req, res, next) => {
   try {
-    const { _id: userId } = req.user;
-    
-const newContact = await contactsService.createContact({ ...req.body, userId });
+    const { name, email, phone } = req.body;
+    const userId = req.user.id;
+
+    let photoUrl = null;
+    if (req.file) {
+      photoUrl = req.file.path; 
+    }
+
+    const newContact = await contactsService.createContact({
+      name,
+      email,
+      phone,
+      photo: photoUrl,
+      user: userId,
+    });
 
     res.status(201).json({
       status: 201,
-      message: 'Successfully created a contact!',
+      message: 'Contact created successfully',
       data: newContact,
     });
   } catch (error) {
     next(error);
   }
-}
+};
 
 export async function patchContact(req, res, next) {
   try {
     const { contactId } = req.params;
     const userId = req.user._id;
+    const body = { ...req.body };
 
-    const updatedContact = await contactsService.updateContactById(contactId, req.body, userId);
+    if (req.file) {
+      const cloudinaryResult = await upload (req.file.path);
+      body.photo = cloudinaryResult.secure_url;
+    }
+
+    const updatedContact = await contactsService.updateContactById(contactId, body, userId);
 
     if (!updatedContact) {
       throw createError(404, 'Contact not found');
