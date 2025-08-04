@@ -1,13 +1,13 @@
 import Session from '../models/Session.js';
 import jwt from 'jsonwebtoken';
 
-const ACCESS_TOKEN_EXPIRE = 15 * 60;
+const JWT_TOKEN_EXPIRE = 15 * 60;
 const REFRESH_TOKEN_EXPIRE = 30 * 24 * 60 * 60;
 
-function getAccessTokenSecret() {
-  const secret = process.env.ACCESS_TOKEN_SECRET;
+function getJwtSecret() {
+  const secret = process.env.JWT_SECRET;
   if (!secret) {
-    throw new Error('ACCESS_TOKEN_SECRET is not set in environment variables');
+    throw new Error('JWT_SECRET is not set in environment variables');
   }
   return secret;
 }
@@ -17,32 +17,34 @@ function getRefreshTokenSecret() {
 }
 
 export function generateTokens(userId) {
-  const accessTokenExp = new Date(Date.now() + ACCESS_TOKEN_EXPIRE * 1000);
+  const jwtTokenExp = new Date(Date.now() + JWT_TOKEN_EXPIRE * 1000);
   const refreshTokenExp = new Date(Date.now() + REFRESH_TOKEN_EXPIRE * 1000);
 
-  const accessToken = jwt.sign({ userId }, getAccessTokenSecret(), {
-    expiresIn: ACCESS_TOKEN_EXPIRE,
-  });
+  const jwtToken = jwt.sign (
+    { userId, iat: Math.floor(Date.now() / 1000) },
+    getJwtSecret(),
+    { expiresIn: JWT_TOKEN_EXPIRE }
+  );
 
   const refreshToken = jwt.sign({ userId }, getRefreshTokenSecret(), {
     expiresIn: REFRESH_TOKEN_EXPIRE,
   });
 
-  return { accessToken, refreshToken, accessTokenExp, refreshTokenExp };
+  return { jwtToken, refreshToken, jwtTokenExp, refreshTokenExp };
 }
 
 export async function saveSession({
   userId,
-  accessToken,
+  jwtToken,
   refreshToken,
-  accessTokenValidUntil,
+  jwtTokenValidUntil,
   refreshTokenValidUntil,
 }) {
   const session = new Session({
     userId,
-    accessToken,
+    jwtToken,
     refreshToken,
-    accessTokenValidUntil,
+    jwtTokenValidUntil,
     refreshTokenValidUntil,
   });
 
