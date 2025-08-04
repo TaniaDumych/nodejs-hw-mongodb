@@ -24,20 +24,20 @@ router.delete('/:contactId',
   ctrlWrapper(deleteContact)
 );
 
+
 router.post(
   '/',
-  authenticate,
-  upload.single('photo'),
+  upload.single('photo'),        
   validateBody(createContactSchema),
   ctrlWrapper(createContact)
 );
 
-router.patch('/:contactId',
+router.patch(
+  '/:contactId',
   isValidId,
+  upload.single('photo'),               
   validateBody(updateContactSchema),
   ctrlWrapper(patchContact)
 );
-
-
 
 export default router;
