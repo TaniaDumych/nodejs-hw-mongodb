@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import * as contactsService from '../services/contacts.js';
-import { upload } from '../services/cloudinary.js';
+
 
 export async function getContacts(req, res, next) {
   try {
@@ -108,8 +108,8 @@ export async function patchContact(req, res, next) {
     const body = { ...req.body };
 
     if (req.file) {
-      const cloudinaryResult = await upload (req.file.path);
-      body.photo = cloudinaryResult.secure_url;
+      
+      body.photo = req.file.path;
     }
 
     const updatedContact = await contactsService.updateContactById(contactId, body, userId);
