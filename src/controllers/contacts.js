@@ -75,7 +75,7 @@ export async function deleteContact(req, res, next) {
 
 export const createContact = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phoneNumber } = req.body;
     const userId = req.user.id;
 
     let photoUrl = null;
@@ -86,7 +86,7 @@ export const createContact = async (req, res, next) => {
     const newContact = await contactsService.createContact({
       name,
       email,
-      phone,
+      phoneNumber,
       photo: photoUrl,
       user: userId,
     });
