@@ -62,14 +62,14 @@ export async function loginController(req, res, next) {
   
     await deleteSessionByUserId(user._id);
 
-    const { accessToken, refreshToken: newRefreshToken, accessTokenExp, refreshTokenExp } = generateTokens(user._id);
+    const { jwtToken, refreshToken: newRefreshToken, jwtTokenExp, refreshTokenExp } = generateTokens(user._id);
 
    
     await saveSession({
       userId: user._id,
-      accessToken,
+      jwtToken,
       refreshToken: newRefreshToken,
-      accessTokenValidUntil: accessTokenExp,
+      jwtTokenValidUntil: jwtTokenExp,
       refreshTokenValidUntil: refreshTokenExp,
     });
 
@@ -85,7 +85,7 @@ res.status(200).json({
   status: 200,
   message: 'Successfully logged in an user!',
   data: {
-    accessToken,
+     jwtToken,
   },
 });
 
@@ -114,14 +114,14 @@ export async function refreshController(req, res, next) {
     const userId = session.userId;
 
  
-    const { accessToken, refreshToken: newRefreshToken, accessTokenExp, refreshTokenExp } = generateTokens(userId);
+    const { jwtToken, refreshToken: newRefreshToken, jwtTokenExp, refreshTokenExp } = generateTokens(userId);
 
     
     await saveSession({
       userId,
-      accessToken,
+      jwtToken,
       refreshToken: newRefreshToken,
-      accessTokenValidUntil: accessTokenExp,
+      jwtTokenValidUntil: jwtTokenExp,
       refreshTokenValidUntil: refreshTokenExp,
     });
 
@@ -136,7 +136,7 @@ export async function refreshController(req, res, next) {
     res.status(200).json({
       status: 200,
       message: 'Successfully refreshed a session!',
-      data: { accessToken },
+      data: { jwtToken },
     });
   } catch (err) {
     next(err);
