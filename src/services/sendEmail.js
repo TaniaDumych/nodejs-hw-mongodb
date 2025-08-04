@@ -10,6 +10,12 @@ const transport = nodemailer.createTransport({
     user: SMTP_USER,
     pass: SMTP_PASSWORD,
   },
+  tls: {
+    
+    rejectUnauthorized: false,
+  },
+  logger: true,
+  debug: true,
 });
 
 export const sendResetPasswordEmail = async (to, subject, html) => {
