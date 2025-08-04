@@ -76,7 +76,7 @@ export async function deleteContact(req, res, next) {
 export const createContact = async (req, res, next) => {
   try {
     const { name, email, phoneNumber } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     let photoUrl = null;
     if (req.file) {
@@ -88,7 +88,7 @@ export const createContact = async (req, res, next) => {
       email,
       phoneNumber,
       photo: photoUrl,
-      user: userId,
+     userId,
     });
 
     res.status(201).json({
