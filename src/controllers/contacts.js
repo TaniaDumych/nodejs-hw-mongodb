@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import * as contactsService from '../services/contacts.js';
-import { uploadToCloudinary } from '../services/cloudinary.js';
+
 
 
 export async function getContacts(req, res, next) {
@@ -76,21 +76,19 @@ export async function deleteContact(req, res, next) {
 
 export const createContact = async (req, res, next) => {
   try {
-    const { name, email, phoneNumber } = req.body;
+    const { name, email, phoneNumber, isFavourite, contactType } = req.body;
     const userId = req.user._id;
 
-    let photoUrl = null;
-    if (req.file) {
-      const cloudinaryResponse = await uploadToCloudinary(req.file.path);
-      photoUrl = cloudinaryResponse.secure_url;
-    }
+    const photoUrl = req.file?.path || null;
 
     const newContact = await contactsService.createContact({
       name,
       email,
       phoneNumber,
+      isFavourite,
+      contactType,
       photo: photoUrl,
-     userId,
+      userId,
     });
 
     res.status(201).json({
@@ -103,16 +101,16 @@ export const createContact = async (req, res, next) => {
   }
 };
 
+
 export async function patchContact(req, res, next) {
   try {
     const { contactId } = req.params;
     const userId = req.user._id;
+
     const body = { ...req.body };
 
-    if (req.file) {
-      
-      const cloudinaryResponse = await uploadToCloudinary(req.file.path);
-      body.photo = cloudinaryResponse.secure_url;
+    if (req.file?.path) {
+      body.photo = req.file.path;
     }
 
     const updatedContact = await contactsService.updateContactById(contactId, body, userId);
