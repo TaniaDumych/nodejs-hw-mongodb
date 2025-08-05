@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import * as contactsService from '../services/contacts.js';
+import { uploadToCloudinary } from '../services/cloudinary.js';
 
 
 export async function getContacts(req, res, next) {
@@ -80,7 +81,8 @@ export const createContact = async (req, res, next) => {
 
     let photoUrl = null;
     if (req.file) {
-      photoUrl = req.file.path; 
+      const cloudinaryResponse = await uploadToCloudinary(req.file.path);
+      photoUrl = cloudinaryResponse.secure_url;
     }
 
     const newContact = await contactsService.createContact({
@@ -109,7 +111,8 @@ export async function patchContact(req, res, next) {
 
     if (req.file) {
       
-      body.photo = req.file.path;
+      const cloudinaryResponse = await uploadToCloudinary(req.file.path);
+      body.photo = cloudinaryResponse.secure_url;
     }
 
     const updatedContact = await contactsService.updateContactById(contactId, body, userId);
