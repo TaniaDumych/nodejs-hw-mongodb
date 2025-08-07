@@ -30,7 +30,7 @@ export function generateTokens(userId) {
     expiresIn: REFRESH_TOKEN_EXPIRE,
   });
 
-  return { accessToken, refreshToken, accessTokenExp, refreshTokenExp };
+  return { accessToken, refreshToken, accessTokenValidUntil: accessTokenExp, refreshTokenValidUntil: refreshTokenExp, };
 }
 
 export async function saveSession({
