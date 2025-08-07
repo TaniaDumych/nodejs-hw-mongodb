@@ -1,7 +1,8 @@
 import Session from '../models/Session.js';
 import jwt from 'jsonwebtoken';
 
-const  ACCESS_TOKEN_EXPIRE = 15 * 60;
+
+const  ACCESS_TOKEN_EXPIRE= 15 * 60;
 const REFRESH_TOKEN_EXPIRE = 30 * 24 * 60 * 60;
 
 function getJwtSecret() {
@@ -17,20 +18,20 @@ function getRefreshTokenSecret() {
 }
 
 export function generateTokens(userId) {
-  const accessTokenExp = new Date(Date.now() + ACCESS_TOKEN_EXPIRE * 1000);
-  const refreshTokenExp = new Date(Date.now() + REFRESH_TOKEN_EXPIRE * 1000);
+  const accessTokenValidUntil = new Date(Date.now() + ACCESS_TOKEN_EXPIRE * 1000);
+  const refreshTokenValidUntil = new Date(Date.now() + REFRESH_TOKEN_EXPIRE * 1000);
 
   const accessToken = jwt.sign (
     { userId, iat: Math.floor(Date.now() / 1000) },
     getJwtSecret(),
-    { expiresIn: ACCESS_TOKEN_EXPIRE }
+    { expiresIn:ACCESS_TOKEN_EXPIRE }
   );
 
   const refreshToken = jwt.sign({ userId }, getRefreshTokenSecret(), {
     expiresIn: REFRESH_TOKEN_EXPIRE,
   });
 
-  return { accessToken, refreshToken, accessTokenExp, refreshTokenExp };
+  return { accessToken, refreshToken, accessTokenValidUntil,refreshTokenValidUntil, };
 }
 
 export async function saveSession({
