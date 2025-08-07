@@ -20,7 +20,7 @@ router.post('/logout', logoutController);
 
 
 router.post('/send-reset-email', validateBody(emailSchema), sendResetEmail);
-router.post('/reset-password', validateBody(passwordResetSchema), resetPassword);
+router.post('/reset-pwd', validateBody(passwordResetSchema), resetPassword);
 
 
 
