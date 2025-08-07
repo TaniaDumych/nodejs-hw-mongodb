@@ -79,7 +79,7 @@ export const createContact = async (req, res, next) => {
     const { name, email, phoneNumber, isFavourite, contactType } = req.body;
     const userId = req.user._id;
 
-    const photoUrl = req.file?.path || null;
+     const photoUrl = req.file?.path || req.file?.secure_url || null;
 
     const newContact = await contactsService.createContact({
       name,
@@ -109,8 +109,8 @@ export async function patchContact(req, res, next) {
 
     const body = { ...req.body };
 
-    if (req.file?.path) {
-      body.photo = req.file.path;
+     if (req.file?.path || req.file?.secure_url) {
+      body.photo = req.file.path || req.file.secure_url;
     }
 
     const updatedContact = await contactsService.updateContactById(contactId, body, userId);
