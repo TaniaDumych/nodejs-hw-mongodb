@@ -5,7 +5,7 @@ import User from '../models/User.js';
 import { sendResetPasswordEmail } from '../services/sendEmail.js';
 
 
-const { JWT_SECRET, APP_DOMAIN } = process.env;
+const { ACCESS_TOKEN_SECRET, APP_DOMAIN} = process.env;
 
 export const loginUser = async (req, res, next) => {
   try {
@@ -21,14 +21,17 @@ export const loginUser = async (req, res, next) => {
       throw createHttpError(401, 'Invalid email or password');
     }
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ id: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({
-      message: 'Successfully logged in!',
-      token,
-      user: {
-        email: user.email,
-        subscription: user.subscription,
+      status: 200,
+      message: 'Login success',
+      data: {
+        accessToken,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
       },
     });
   } catch (error) {
@@ -42,23 +45,31 @@ export const sendResetEmail = async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      throw createHttpError(404, 'User not found');
+      throw createHttpError(404, 'User not found!');
     }
 
-    const resetToken = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+   
+    const resetToken = jwt.sign({ email: user.email }, ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
+
     const resetLink = `${APP_DOMAIN}/reset-password?token=${resetToken}`;
 
     const emailHtml = `
       <h2>Password Reset</h2>
       <p>Click the link below to reset your password:</p>
       <a href="${resetLink}">${resetLink}</a>
-      <p>This link will expire in 1 hour.</p>
+      <p>This link will expire in 5 minutes.</p>
     `;
 
-    await sendResetPasswordEmail (email, 'Password Reset', emailHtml);
+    try {
+      await sendResetPasswordEmail(email, 'Password Reset', emailHtml);
+    } catch  {
+      throw createHttpError(500, 'Failed to send the email, please try again later.');
+    }
 
     res.status(200).json({
-      message: 'Password reset email sent successfully',
+      status: 200,
+      message: 'Reset password email has been successfully sent.',
+      data: {},
     });
   } catch (error) {
     next(error);
@@ -69,21 +80,35 @@ export const resetPassword = async (req, res, next) => {
   try {
     const { token, password } = req.body;
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.id;
+    let decoded;
+    try {
+      decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+    } catch {
+      return next(createHttpError(401, 'Token is expired or invalid.'));
+    }
+
+    const { email } = decoded;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw createHttpError(404, 'User not found!');
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+    user.password = hashedPassword;
 
-    res.status(200).json({ message: 'Password successfully updated' });
+
+    user.tokens = []; 
+
+    await user.save();
+
+    res.status(200).json({
+      status: 200,
+      message: 'Password has been successfully reset.',
+      data: {},
+    });
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-  return next(createHttpError(400, 'Reset token has expired'));
-}
-if (error.name === 'JsonWebTokenError') {
-  return next(createHttpError(400, 'Invalid reset token'));
-}
     next(error);
-    
   }
 };
+
