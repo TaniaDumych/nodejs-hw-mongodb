@@ -8,13 +8,13 @@ export const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      throw createHttpError(401, 'Authorization header missing');
+       return next(createHttpError(401, 'Authorization header missing'));
     }
 
     const [scheme, token] = authHeader.split(' ');
 
     if (scheme !== 'Bearer' || !token) {
-      throw createHttpError(401, 'Invalid authorization format');
+      return next(createHttpError(401, 'Invalid authorization format'));
     }
 
     const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
