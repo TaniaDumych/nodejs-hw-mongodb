@@ -21,7 +21,7 @@ export const loginUser = async (req, res, next) => {
       throw createHttpError(401, 'Invalid email or password');
     }
 
-    const accessToken = jwt.sign({ id: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ userId: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({
       status: 200,
