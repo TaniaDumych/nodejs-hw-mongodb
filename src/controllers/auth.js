@@ -62,7 +62,7 @@ export async function loginController(req, res, next) {
   
     await deleteSessionByUserId(user._id);
 
-    const { accessToken, refreshToken: newRefreshToken, accessTokenExp, refreshTokenExp } = generateTokens(user._id);
+    const { accessToken, refreshToken: newRefreshToken,  accessTokenValidUntil: accessTokenExp, refreshTokenValidUntil:refreshTokenExp } = generateTokens(user._id);
 
    
     await saveSession({
@@ -114,7 +114,7 @@ export async function refreshController(req, res, next) {
     const userId = session.userId;
 
  
-    const { accessToken, refreshToken: newRefreshToken, accessTokenExp, refreshTokenExp } = generateTokens(userId);
+    const { accessToken, refreshToken: newRefreshToken, accessTokenValidUntil:accessTokenExp,  refreshTokenValidUntil:refreshTokenExp } = generateTokens(userId);
 
     
     await saveSession({
