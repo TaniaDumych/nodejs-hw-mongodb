@@ -11,7 +11,7 @@ import { passwordResetSchema } from '../schemas/resetPwdSchema.js';
 
 
 const router = Router();
-
+router.use(authenticate);
 router.post('/register', registerController);
 router.post('/login', loginController);
 router.post('/refresh', refreshController);
@@ -26,7 +26,7 @@ router.post('/reset-pwd', validateBody(passwordResetSchema), resetPassword);
 
 
 
-router.use(authenticate);
+
 router.get('/', getContacts);
 
 

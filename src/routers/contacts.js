@@ -28,7 +28,8 @@ router.delete('/:contactId',
 
 router.post(
   '/',
-  upload.single('photo'),        
+  authenticate,
+ upload.single('photo'),        
   validateBody(createContactSchema),
   ctrlWrapper(createContact)
 );

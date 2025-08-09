@@ -19,10 +19,15 @@ export const authenticate = (req, res, next) => {
 
     const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
+    
+
     req.user = { _id: payload.userId };
 
-    next();
+    
+ next();
   } catch (error) {
+console.error('Authentication error:', error);
+    
     if (error.name === 'TokenExpiredError') {
       return next(createHttpError(401, 'Access token expired'));
     }
