@@ -1,0 +1,41 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+properties:
+  _id:
+    description: "Contact's unique ID (MongoDB ObjectId)"
+    type: string
+    example: 68979584b6cada76ca7bceec
+  userId:
+    description: 'ID of the user who owns this contact (MongoDB ObjectId)'
+    type: string
+    example: 688619fc782eb8d70107827e
+  name:
+    description: "Contact's name"
+    type: string
+    example: 'Tania'
+  phoneNumber:
+    description: "Contact's phone number"
+    type: string
+    example: '12345679'
+  email:
+    description: "Contact's email"
+    type: string
+    example: 'tanja11.malvchko@gmail.com'
+  isFavourite:
+    description: 'Whether this contact is a favourite'
+    type: boolean
+    example: false
+  contactType:
+    description: 'Type of contact'
+    type: string
+    enum: ['work', 'home', 'personal']
+    example: 'work'
+  photo:
+    description: "Link to the contact's photo"
+    type: string
+    format: uri
+    example: 'https://res.cloudinary.com/dv3hnktlz/image/upload/v1754764715/contacts/ykt79pnhv56bijdostql.jpg'
