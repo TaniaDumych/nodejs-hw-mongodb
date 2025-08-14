@@ -35,7 +35,8 @@ function setupServer() {
   });
 
  
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+ app.use(['/api-docs', '/api-docs/'], swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
