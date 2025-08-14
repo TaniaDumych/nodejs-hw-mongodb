@@ -6,27 +6,27 @@ required:
   - contactType
 properties:
   _id:
-    description: "Contact's unique ID (MongoDB ObjectId)"
+    description: 'Contact`s unique ID (MongoDB ObjectId)'
     type: string
-    example: 68979584b6cada76ca7bceec
+    example: 689cfcbe5a14e95382705d87
   userId:
     description: 'ID of the user who owns this contact (MongoDB ObjectId)'
     type: string
     example: 688619fc782eb8d70107827e
   name:
-    description: "Contact's name"
+    description: 'Contact`s name'
     type: string
     example: 'Tania'
   phoneNumber:
-    description: "Contact's phone number"
+    description: 'Contact`s phone number'
     type: string
-    example: '12345679'
+    example: '123456789'
   email:
-    description: "Contact's email"
+    description: 'Contact`s email'
     type: string
     example: 'tanja11.malvchko@gmail.com'
   isFavourite:
-    description: 'Whether this contact is a favourite'
+    description: 'Whether is contact a favourite'
     type: boolean
     example: false
   contactType:
@@ -35,7 +35,7 @@ properties:
     enum: ['work', 'home', 'personal']
     example: 'work'
   photo:
-    description: "Link to the contact's photo"
+    description: 'Link to the contact`s photo'
     type: string
     format: uri
-    example: 'https://res.cloudinary.com/dv3hnktlz/image/upload/v1754764715/contacts/ykt79pnhv56bijdostql.jpg'
+    example: https://res.cloudinary.com/dv3hnktlz/image/upload/v1755118782/contacts/viqrxvurfehtrhaveegs.jpg
