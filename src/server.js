@@ -11,7 +11,8 @@ import errorHandler from './middlewares/errorHandler.js';
 
 
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import swaggerDocument from '../docs/swagger.json';
+
 
 dotenv.config();
 
